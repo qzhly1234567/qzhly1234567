@@ -7,27 +7,23 @@ on:
   push:
     tags:
       - 'v*.*.*'  # 当推送的标签匹配 'v*.*.*' 时触发工作流
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 16
-      - run: npm ci
-      - run: npm test
 
-  publish-npm:
-    needs: build
+jobs:
+  publish:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v2  # 检出仓库代码
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
         with:
-          node-version: 16
-          registry-url: https://registry.npmjs.org/
-      - run: npm ci
-      - run: npm publish
+          node-version: '14'  # 使用 Node.js 14
+
+      - name: Install dependencies
+        run: npm install  # 安装依赖
+
+      - name: Publish to npm
+        run: npm publish  # 发布到 npm
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
