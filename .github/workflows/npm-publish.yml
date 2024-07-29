@@ -4,9 +4,9 @@
 name: Node.js Package
 
 on:
-  release:
-    types: [created]
-
+  push:
+    tags:
+      - 'v*.*.*'  # 当推送的标签匹配 'v*.*.*' 时触发工作流
 jobs:
   build:
     runs-on: ubuntu-latest
